@@ -1,0 +1,153 @@
+
+#to find average accuracy
+import pandas as pd
+df=pd.read_csv("robot_dataset(robot_dataset).csv")
+m=df["Accuracy (%)"].mean()
+print(m)
+94.92060000000001
+#print robot id with task type
+import pandas as pd
+df=pd.read_csv("robot_dataset(robot_dataset).csv")
+m=df['Robot_ID']
+print(m)
+0      RBT_001
+1      RBT_002
+2      RBT_003
+3      RBT_004
+4      RBT_005
+        ...   
+495    RBT_496
+496    RBT_497
+497    RBT_498
+498    RBT_499
+499    RBT_500
+Name: Robot_ID, Length: 500, dtype: object
+#to print noof robot in this dataset
+import pandas as pd
+df=pd.read_csv("robot_dataset(robot_dataset).csv")
+noof= len(df)
+print(noof)
+500
+#print record from RBT_010 to RBT_036
+import pandas as pd
+df=pd.read_csv("robot_dataset(robot_dataset).csv")
+df.iloc[10:20]
+Robot_ID	Task_Type	Component_ID	Sensor_Type	Sensor_Data	Processing_Time (s)	Accuracy (%)	Environmental_Status	Energy_Consumption (kWh)	Human_Intervention_Needed	Obstacle_Detected	Defect_Detected
+10	RBT_011	Assembly	CMP_567	Camera	0 (no obstacle)	48.5	96.1	Unstable	2.6	Yes	Yes	Yes
+11	RBT_012	Painting	CMP_268	LIDAR	75.8 (°C)	44.8	99.6	Stable	2.2	No	Yes	No
+12	RBT_013	Inspection	CMP_631	Thermal	98% (defect-free)	53.2	93.8	Unstable	2.0	No	No	No
+13	RBT_014	Inspection	CMP_115	Camera	82.4 (°C)	41.7	92.0	Stable	2.2	Yes	No	No
+14	RBT_015	Inspection	CMP_932	LIDAR + Camera	92% (visual fit)	50.0	91.3	Stable	2.8	Yes	No	Yes
+15	RBT_016	Assembly	CMP_424	LIDAR + Camera	92% (visual fit)	57.0	98.1	Unstable	1.6	Yes	Yes	No
+16	RBT_017	Inspection	CMP_201	Camera	0 (no obstacle)	78.1	98.9	Stable	2.9	Yes	Yes	Yes
+17	RBT_018	Painting	CMP_262	LIDAR + Camera	92% (visual fit)	49.3	92.0	Unstable	1.8	Yes	No	Yes
+18	RBT_019	Inspection	CMP_742	LIDAR + Camera	1 (obstacle detected)	78.9	98.5	Unstable	2.4	Yes	No	Yes
+19	RBT_020	Painting	CMP_370	Thermal	0 (no obstacle)	75.6	98.7	Stable	1.1	Yes	Yes	No
+#print robot id with task type
+import pandas as pd
+df=pd.read_csv("robot_dataset(robot_dataset).csv")
+print(df["Robot_ID"],["Task_type"])
+0      RBT_001
+1      RBT_002
+2      RBT_003
+3      RBT_004
+4      RBT_005
+        ...   
+495    RBT_496
+496    RBT_497
+497    RBT_498
+498    RBT_499
+499    RBT_500
+Name: Robot_ID, Length: 500, dtype: object ['Task_type']
+ 
+#group the data by its sensor type
+import pandas as pd
+df=pd.read_csv("robot_dataset(robot_dataset).csv")
+a=df.groupby(['Sensor_Type'])
+print(a.first())
+               Robot_ID   Task_Type Component_ID            Sensor_Data  \
+Sensor_Type                                                               
+Camera          RBT_004     Welding      CMP_433      98% (defect-free)   
+LIDAR           RBT_001  Inspection      CMP_460  1 (obstacle detected)   
+LIDAR + Camera  RBT_015  Inspection      CMP_932       92% (visual fit)   
+Thermal         RBT_002    Assembly      CMP_252              85.3 (°C)   
+
+                Processing_Time (s)  Accuracy (%) Environmental_Status  \
+Sensor_Type                                                              
+Camera                         74.5          90.2               Stable   
+LIDAR                          67.0          90.4               Stable   
+LIDAR + Camera                 50.0          91.3               Stable   
+Thermal                        71.2          98.1               Stable   
+
+                Energy_Consumption (kWh) Human_Intervention_Needed  \
+Sensor_Type                                                          
+Camera                               2.4                       Yes   
+LIDAR                                2.2                        No   
+LIDAR + Camera                       2.8                       Yes   
+Thermal                              2.7                       Yes   
+
+               Obstacle_Detected Defect_Detected  
+Sensor_Type                                       
+Camera                        No             Yes  
+LIDAR                        Yes             Yes  
+LIDAR + Camera                No             Yes  
+Thermal                       No              No  
+import pandas as pd
+df=pd.read_csv("robot_dataset(robot_dataset).csv")
+grouping=df.groupby(['Task_Type','Environmental_Status'])
+print(grouping.first())
+                                Robot_ID Component_ID Sensor_Type  \
+Task_Type  Environmental_Status                                     
+Assembly   Stable                RBT_002      CMP_252     Thermal   
+           Unstable              RBT_005      CMP_992      Camera   
+Inspection Stable                RBT_001      CMP_460       LIDAR   
+           Unstable              RBT_003      CMP_248     Thermal   
+Painting   Stable                RBT_010      CMP_617       LIDAR   
+           Unstable              RBT_006      CMP_309     Thermal   
+Welding    Stable                RBT_004      CMP_433      Camera   
+           Unstable              RBT_034      CMP_995       LIDAR   
+
+                                           Sensor_Data  Processing_Time (s)  \
+Task_Type  Environmental_Status                                               
+Assembly   Stable                            85.3 (°C)                 71.2   
+           Unstable                   92% (visual fit)                 64.5   
+Inspection Stable                1 (obstacle detected)                 67.0   
+           Unstable                   92% (visual fit)                 49.2   
+Painting   Stable                      0 (no obstacle)                 65.1   
+           Unstable              1 (obstacle detected)                 51.6   
+Welding    Stable                    98% (defect-free)                 74.5   
+           Unstable                    0 (no obstacle)                 52.9   
+
+                                 Accuracy (%)  Energy_Consumption (kWh)  \
+Task_Type  Environmental_Status                                           
+Assembly   Stable                        98.1                       2.7   
+           Unstable                      97.2                       1.8   
+Inspection Stable                        90.4                       2.2   
+           Unstable                      95.3                       2.4   
+Painting   Stable                        94.1                       2.9   
+           Unstable                      93.4                       1.5   
+Welding    Stable                        90.2                       2.4   
+           Unstable                      97.4                       1.0   
+
+                                Human_Intervention_Needed Obstacle_Detected  \
+Task_Type  Environmental_Status                                               
+Assembly   Stable                                     Yes                No   
+           Unstable                                    No                No   
+Inspection Stable                                      No               Yes   
+           Unstable                                    No                No   
+Painting   Stable                                      No                No   
+           Unstable                                    No                No   
+Welding    Stable                                     Yes                No   
+           Unstable                                   Yes                No   
+
+                                Defect_Detected  
+Task_Type  Environmental_Status                  
+Assembly   Stable                            No  
+           Unstable                          No  
+Inspection Stable                           Yes  
+           Unstable                          No  
+Painting   Stable                            No  
+           Unstable                          No  
+Welding    Stable                           Yes  
+           Unstable                          No  
+ 
