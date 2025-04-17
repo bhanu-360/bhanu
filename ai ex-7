@@ -1,0 +1,171 @@
+
+class NQueensCSP:
+    def __init__(self, n):
+        self.n = n
+        self.variables = list(range(n))
+        self.domains = {v: list(range(n)) for v in self.variables}
+    def is_consistent(self, var, value, assignment):
+        for col, row in assignment.items():
+            if value == row:
+                return False
+            if abs(var - col) == abs(value - row):
+                return False
+        return True
+    def backtracking_search(self, assignment={}):
+        if len(assignment) == self.n:
+            return assignment
+        unassigned = [v for v in self.variables if v not in assignment]
+        var = unassigned[0]
+        for value in self.domains[var]:
+            if self.is_consistent(var, value, assignment):
+                assignment[var] = value
+                result = self.backtracking_search(assignment)
+                if result is not None:
+                    return result
+                del assignment[var]
+        return None
+    def solve(self):
+        solution = self.backtracking_search()
+        if solution:
+            return self.format_solution(solution)
+        return None
+    def format_solution(self, solution):
+        board = []
+        for col in sorted(solution):
+            row = ['Q' if i == solution[col] else '.' for i in range(self.n)]
+            board.append(' '.join(row))
+        return board
+ 
+n = 8
+csp = NQueensCSP(n)
+solution = csp.solve()
+ 
+if solution:
+    for row in solution:
+        print(row)
+else:
+    print(f"No solution found for {n}-Queens")
+Q . . . . . . .
+. . . . Q . . .
+. . . . . . . Q
+. . . . . Q . .
+. . Q . . . . .
+. . . . . . Q .
+. Q . . . . . .
+. . . Q . . . .
+global N
+N = 8
+def printSolution(board):
+    for i in range(N):
+        for j in range(N):
+            print (board[i][j],end=' ')
+        print()
+def isSafe(board, row, col):
+    for i in range(col):
+        if board[row][i] == 1:
+            return False
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+    for i, j in zip(range(row, N, 1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+    return True
+def solveNQUtil(board, col):
+    if col >= N:
+        return True
+    for i in range(N):
+        if isSafe(board, i, col):
+            board[i][col] = 1
+            if solveNQUtil(board, col + 1) == True:
+                return True
+            board[i][col] = 0
+    return False
+def solveNQ():
+    board = [ [0, 0, 0, 0,0,0,0,0],
+              [0, 0, 0, 0,0,0,0,0],
+              [0, 0, 0, 0,0,0,0,0],
+              [0, 0, 0, 0,0,0,0,0],
+              [0, 0, 0, 0,0,0,0,0],
+              [0, 0, 0, 0,0,0,0,0],
+              [0, 0, 0, 0,0,0,0,0],
+              [0, 0, 0, 0,0,0,0,0]
+             ]
+    if solveNQUtil(board, 0) == False:
+        print ("Solution does not exist")
+        return False
+    printSolution(board)
+    return True
+solveNQ()
+1 0 0 0 0 0 0 0 
+0 0 0 0 0 0 1 0 
+0 0 0 0 1 0 0 0 
+0 0 0 0 0 0 0 1 
+0 1 0 0 0 0 0 0 
+0 0 0 1 0 0 0 0 
+0 0 0 0 0 1 0 0 
+0 0 1 0 0 0 0 0 
+True
+N = 4
+ld = [0] * 30
+rd = [0] * 30
+cl = [0] * 30
+ 
+def printSolution(board):
+
+	for i in range(N):
+
+		for j in range(N):
+
+			print(" Q " if board[i][j] == 1 else " . ", end="")
+
+		print()
+ 
+ 
+def solveNQUtil(board, col):
+
+	if col >= N:
+
+		return True
+
+	for i in range(N):
+
+		if (ld[i - col + N - 1] != 1 and rd[i + col] != 1) and cl[i] != 1:
+
+			board[i][col] = 1
+
+			ld[i - col + N - 1] = rd[i + col] = cl[i] = 1
+
+			if solveNQUtil(board, col + 1):
+
+				return True
+
+			board[i][col] = 0 # BACKTRACK
+
+			ld[i - col + N - 1] = rd[i + col] = cl[i] = 0
+
+	return False
+ 
+def solveNQ():
+
+	board = [[0 for _ in range(N)] for _ in range(N)]
+ 
+	if not solveNQUtil(board, 0):
+
+		print("Solution does not exist")
+
+		return False
+ 
+	printSolution(board)
+
+	return True
+ 
+
+if __name__ == "__main__":
+
+	solveNQ()
+ .  .  Q  . 
+ Q  .  .  . 
+ .  .  .  Q 
+ .  Q  .  . 
+ 
