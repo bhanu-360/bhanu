@@ -1,0 +1,38 @@
+
+def f(x):
+    #The given function f(x) = x^2 + 4x.
+    return x**2 + 4*x
+
+def hill_climbing(starting_point, step_size=0.1, max_iterations=100):
+    #Hill Climbing algorithm to maximize f(x).
+    current_solution = starting_point
+    current_value = f(current_solution)
+    
+    for _ in range(max_iterations):
+        # Generate neighbors by moving left and right
+        left_neighbor = current_solution - step_size
+        right_neighbor = current_solution + step_size
+        
+        # Evaluate the function at the neighbors
+        left_value = f(left_neighbor)
+        right_value = f(right_neighbor)
+        
+        # Compare the neighbors and move to the one with the higher value
+        if left_value > current_value:
+            current_solution = left_neighbor
+            current_value = left_value
+            
+        else:
+            current_solution = right_neighbor
+            current_value = right_value
+        
+    return current_solution, current_value
+
+starting_point = 0
+optimal_solution, optimal_value = hill_climbing(starting_point)
+
+print(f"Best solution found: {optimal_solution}")
+print(f"Objective value at best solution: {optimal_value}")
+Best solution found: 9.99999999999998
+Objective value at best solution: 139.99999999999955
+ 
